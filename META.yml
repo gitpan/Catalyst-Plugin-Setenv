@@ -1,6 +1,6 @@
 ---
 name: Catalyst-Plugin-Setenv
-version: 0.01
+version: 0.02
 author:
   - 'Jonathan Rockway <jrockway@cpan.org>'
 abstract: Allows you to set up the environment from Catalyst's config file.
@@ -16,9 +16,7 @@ build_requires:
 provides:
   Catalyst::Plugin::Setenv:
     file: lib/Catalyst/Plugin/Setenv.pm
-    version: 0.01
-no_index:
-  - t
+    version: 0.02
 generated_by: Module::Build version 0.2805
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html

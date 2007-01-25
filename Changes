@@ -1,5 +1,8 @@
 Revision history for Catalyst-Plugin-Setenv
 
-0.01    12 October 2006
-        First version, released on an unsuspecting world.
+0.02 25 January 2006
+   * Add the ability to append config'd environemnt variable
+     to current value
 
+0.01 12 October 2006
+   * First version, released on an unsuspecting world.

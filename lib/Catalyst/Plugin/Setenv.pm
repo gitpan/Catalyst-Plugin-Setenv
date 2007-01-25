@@ -10,11 +10,11 @@ Catalyst::Plugin::Setenv - Allows you to set up the environment from Catalyst's 
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -28,8 +28,28 @@ In your config file:
       FOO: bar
       BAR: baz
 
-When your app starts, $ENV{FOO} will be "bar", and $ENV{BAR} will be
+When your app starts, C<$ENV{FOO}> will be "bar", and C<$ENV{BAR}> will be
 "baz".
+
+You can also append and prepend to existing environment variables.
+For example, if C<$PATH> is C</bin:/usr/bin>, you can append
+C</myapp/bin> by writing:
+
+   environment:
+     PATH: "::/myapp/bin"
+
+After that, C<$PATH> will be set to C</bin:/usr/bin:/myapp/bin>.  You
+can prepend, too:
+
+   environment:
+     PATH: "/myapp/bin::"
+
+which yields C</myapp/bin:/bin:/usr/bin>.
+
+If you want a literal colon at the beginning or end of the environment
+variable, escape it with a C<\>, like C<\:foo> or C<foo\:>.  Note that
+slashes aren't meaningful elsewhere, they're inserted verbatim into
+the relevant environment variable.
 
 =head1 EXPORT
 
@@ -52,10 +72,23 @@ sub setup {
     my $env = $c->config->{environment};
     return unless ref $env eq 'HASH';
 
-    foreach (keys %$env){
-	$ENV{$_} = $env->{$_};
+    foreach my $key (keys %$env){
+	my $value = $env->{$key};
+	
+	if($value =~ /^:(.+)$/){
+	    $ENV{$key} .= $1;
+	}
+	elsif($value =~ /^(.+[^\\]):$/){
+	    $ENV{$key} = $1. $ENV{$key};
+	}
+	else {
+	    $value =~ s/(^\\:|\\:$)/:/;
+	    $value =~ s/(^\\\\:|\\\\:$)/\\:/;
+
+	    $ENV{$key} = $value;
+	}
     }
-      
+    
     return;
 }
 
@@ -64,6 +97,14 @@ sub setup {
 Jonathan Rockway, C<< <jrockway at cpan.org> >>
 
 =head1 BUGS
+
+=head2 Escaping
+
+Things like "\:foo" can't be literally inserted into an environment
+variable, due to my simplistic escaping scheme.  Patches to fix this
+(but not interpert C<\>s anywhere else) are welcome.
+
+=head2 REPORTING
 
 Please report any bugs or feature requests to
 C<bug-catalyst-plugin-setenv at rt.cpan.org>, or through the web interface at

@@ -5,6 +5,13 @@
 package TestApp;
 use FindBin qw($Bin);
 use Catalyst qw/Setenv/;
-__PACKAGE__->config({environment => {FOO => 'foo', BAR => 'bar'}});
+__PACKAGE__->config({environment => {FOO    => 'foo', 
+				     BAR    => 'bar',
+				     EXISTS => '::YYY',
+				     PREPEND => 'YYY::',
+				     NEW    => "\\:YYY",
+				     SLASH  => "\\\\:YYY",
+				     END    => "YYY\\\\:", }}
+		   );
 __PACKAGE__->setup;
 1;

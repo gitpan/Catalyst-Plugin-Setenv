@@ -16,7 +16,6 @@ my $builder = Module::Build->new(
 		       'FindBin' => 0,
     },
     add_to_cleanup      => [ 'Catalyst-Plugin-Setenv-*' ],
-    no_index => ['t'],
 );
 
 $builder->create_build_script();
