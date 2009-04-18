@@ -2,7 +2,7 @@ package Catalyst::Plugin::Setenv;
 
 use warnings;
 use strict;
-use NEXT;
+use MRO::Compat;
 
 =head1 NAME
 
@@ -10,11 +10,11 @@ Catalyst::Plugin::Setenv - Allows you to set up the environment from Catalyst's 
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -67,7 +67,7 @@ Calls the other setup methods, and then sets the environment variables.
 sub setup {
     my $c = shift;
     
-    $c->NEXT::setup(@_);
+    $c->next::method(@_);
     
     my $env = $c->config->{environment};
     return unless ref $env eq 'HASH';
